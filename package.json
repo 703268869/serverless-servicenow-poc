@@ -77,6 +77,9 @@
     "joi": "^17.4.0",
     "lodash": "^4.17.21",
     "p-map": "^4.0.0",
+    "sequelize": "^6.6.5",
+    "sequelize-noupdate-attributes": "^1.0.0",
+    "sequelize-typescript": "^2.1.0",
     "stream-chain": "^2.2.4",
     "stream-json": "^1.7.1"
   },
