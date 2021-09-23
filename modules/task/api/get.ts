@@ -2,42 +2,39 @@ import type { Context, APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda
 import { sendErrorResponse, sendResponse } from '../../../shared-packages/utils/response-handler';
 import Log from '@dazn/lambda-powertools-logger';
 
-
+import axios from 'axios';
 import middleware from '../../../shared-packages/utils/middleware';
 import { immerseReport, immerseReportByReportDateFilter } from '../utils/dynamodb-query';
-
 
 const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyResult> => {
   try {
     console.log('event 1 ============>', event);
     console.log('event ============>', JSON.stringify(event));
     context.callbackWaitsForEmptyEventLoop = false;
-    return sendResponse({
-      response: { body: {
-        "id": 5519,
-        "skillid": "003782c0-6340-4221-85c4-4eae211ff32f",
-        "companyid": "47464071-ad49-400f-a615-ebe2d2cecebc",
-        "groupid": [
-            "95e686e7-5651-4c92-8832-6dda6aec35d5"
-        ],
-        "skillname": "Transformation Lead",
-        "aka": "transformation_lead",
-        "description": "Transformation Lead",
-        "tags": [
-            "none"
-        ],
-        "genomeid": 1,
-        "externalid": 1,
-        "skillstatus": "1",
-        "created_at": "2021-04-07T06:33:14.542Z",
-        "updated_at": "2021-04-07T06:33:14.542Z",
-        "entityversion": 1,
-        "hrmsid": null
-    }},
-    });
-  } catch (error) {
-    Log.error(error.message, new Error(error));
-    return sendErrorResponse({ response: error.message });
+    const today = new Date();
+    let month: any = today.getMonth() < 12 ? today.getMonth() + 1 : 1;
+    month = ('0' + month).slice(-2);
+    let year = today.getFullYear();
+    const day = today.getDate();
+
+    console.log('month, day, year', month, year, day);
+
+     const token = Buffer.from('850046713:Password', 'utf8').toString('base64');
+    const res: any = await axios({
+      method: 'get',
+      url: `https://genpactllcdemo2.service-now.com/api/now/table/u_tasks?sysparm_query=u_assigned_to%3D850046712%5Esys_created_on%3Ejavascript%3Ags.dateGenerate('${year}-${month}-${day}'%2C'00%3A00%3A00')`,
+      // url: 'https://gapi-dev.azure-api.net/pulse-dev-ops360/graphql',
+      headers: {
+        Authorization: `Basic ${token}`,
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }); 
+    console.log('response ==========>', res.data.result);  
+    return sendResponse({ code: 200, response: res.data.result });
+  } catch (e) {
+    console.error('Error in fetching user scopes:', e);
+    return sendErrorResponse({ code: 500, response: e.message });
   }
 };
 

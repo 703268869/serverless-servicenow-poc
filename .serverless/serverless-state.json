@@ -1,0 +1,2472 @@
+{
+  "service": {
+    "service": "servicenow-poc-flm-svc",
+    "serviceObject": {
+      "name": "servicenow-poc-flm-svc"
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs14.x",
+      "region": "ap-south-1",
+      "memorySize": 128,
+      "versionFunctions": true,
+      "lambdaHashingVersion": "20201221",
+      "vpc": {
+        "subnetIds": [
+          "subnet-0a6df6a7c79a84043",
+          "subnet-0f2d8fd6ab79a7454"
+        ],
+        "securityGroupIds": [
+          "sg-03d11957474c5fad7"
+        ]
+      },
+      "eventBridge": {
+        "useCloudFormation": true
+      },
+      "tracing": {
+        "apiGateway": true,
+        "lambda": true
+      },
+      "logs": {
+        "httpApi": false,
+        "restApi": {
+          "accessLogging": true,
+          "level": "INFO",
+          "executionLogging": true,
+          "fullExecutionData": true
+        }
+      },
+      "apiGateway": {
+        "metrics": true,
+        "minimumCompressionSize": 1024,
+        "shouldStartNameWithService": true
+      },
+      "environment": {
+        "NODE_ENV": "poc",
+        "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+      },
+      "deploymentBucket": "tas-deployments-bucket-poc-ap-south-1",
+      "tags": {
+        "Stack": "POC",
+        "Environment": "POC"
+      },
+      "iam": {
+        "role": {
+          "statements": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "ssm:GetParameter",
+                "ssm:GetParameterHistory",
+                "ssm:GetParameters",
+                "ssm:GetParametersByPath"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
+      "stage": "dev",
+      "variableSyntax": "\\${([^{}:]+?(?:\\(|:)(?:[^:{}][^{}]*?)?)}",
+      "deploymentBucketObject": {
+        "name": "tas-deployments-bucket-poc-ap-south-1",
+        "maxPreviousDeploymentArtifacts": 10,
+        "blockPublicAccess": true,
+        "serverSideEncryption": "AES256"
+      },
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "IssueDashapiDashGETLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/servicenow-poc-flm-svc-poc-issue-api-GET"
+            }
+          },
+          "IssueDashapiDashPOSTLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/servicenow-poc-flm-svc-poc-issue-api-POST"
+            }
+          },
+          "RemarkDashapiDashGETLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/servicenow-poc-flm-svc-poc-remark-api-GET"
+            }
+          },
+          "RemarkDashapiDashPOSTLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/servicenow-poc-flm-svc-poc-remark-api-POST"
+            }
+          },
+          "TaskDashapiDashGETLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/servicenow-poc-flm-svc-poc-task-api-GET"
+            }
+          },
+          "TaskDashapiDashPOSTLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/servicenow-poc-flm-svc-poc-task-api-POST"
+            }
+          },
+          "TopicDashmasterDashapiDashGETLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/servicenow-poc-flm-svc-poc-topic-master-api-GET"
+            }
+          },
+          "TopicDashmasterDashapiDashPOSTLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/servicenow-poc-flm-svc-poc-topic-master-api-POST"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "servicenow-poc-flm-svc",
+                        "poc",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/servicenow-poc-flm-svc-poc*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/servicenow-poc-flm-svc-poc*:*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][0]"
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "xray:PutTraceSegments",
+                          "xray:PutTelemetryRecords"
+                        ],
+                        "Resource": [
+                          "*"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "servicenow-poc-flm-svc",
+                    "poc",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "lambdaRole"
+                  ]
+                ]
+              },
+              "ManagedPolicyArns": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                    ]
+                  ]
+                }
+              ]
+            }
+          },
+          "IssueDashapiDashGETLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
+                "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-issue-api-GET.zip"
+              },
+              "Handler": "modules/issue/api/get.fn",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "servicenow-poc-flm-svc-poc-issue-api-GET",
+              "MemorySize": 128,
+              "Timeout": 6,
+              "Tags": [
+                {
+                  "Key": "Stack",
+                  "Value": "POC"
+                },
+                {
+                  "Key": "Environment",
+                  "Value": "POC"
+                }
+              ],
+              "TracingConfig": {
+                "Mode": "Active"
+              },
+              "Environment": {
+                "Variables": {
+                  "NODE_ENV": "poc",
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "VpcConfig": {
+                "SecurityGroupIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"securityGroupIds\"]"
+                },
+                "SubnetIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"subnetIds\"]"
+                }
+              }
+            },
+            "DependsOn": [
+              "IssueDashapiDashGETLogGroup"
+            ]
+          },
+          "IssueDashapiDashPOSTLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
+                "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-issue-api-POST.zip"
+              },
+              "Handler": "modules/issue/api/post.fn",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "servicenow-poc-flm-svc-poc-issue-api-POST",
+              "MemorySize": 128,
+              "Timeout": 6,
+              "Tags": [
+                {
+                  "Key": "Stack",
+                  "Value": "POC"
+                },
+                {
+                  "Key": "Environment",
+                  "Value": "POC"
+                }
+              ],
+              "TracingConfig": {
+                "Mode": "Active"
+              },
+              "Environment": {
+                "Variables": {
+                  "NODE_ENV": "poc",
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "VpcConfig": {
+                "SecurityGroupIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"securityGroupIds\"]"
+                },
+                "SubnetIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"subnetIds\"]"
+                }
+              }
+            },
+            "DependsOn": [
+              "IssueDashapiDashPOSTLogGroup"
+            ]
+          },
+          "RemarkDashapiDashGETLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
+                "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-remark-api-GET.zip"
+              },
+              "Handler": "modules/remark/api/get.fn",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "servicenow-poc-flm-svc-poc-remark-api-GET",
+              "MemorySize": 128,
+              "Timeout": 6,
+              "Tags": [
+                {
+                  "Key": "Stack",
+                  "Value": "POC"
+                },
+                {
+                  "Key": "Environment",
+                  "Value": "POC"
+                }
+              ],
+              "TracingConfig": {
+                "Mode": "Active"
+              },
+              "Environment": {
+                "Variables": {
+                  "NODE_ENV": "poc",
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "VpcConfig": {
+                "SecurityGroupIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"securityGroupIds\"]"
+                },
+                "SubnetIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"subnetIds\"]"
+                }
+              }
+            },
+            "DependsOn": [
+              "RemarkDashapiDashGETLogGroup"
+            ]
+          },
+          "RemarkDashapiDashPOSTLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
+                "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-remark-api-POST.zip"
+              },
+              "Handler": "modules/remark/api/post.fn",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "servicenow-poc-flm-svc-poc-remark-api-POST",
+              "MemorySize": 128,
+              "Timeout": 6,
+              "Tags": [
+                {
+                  "Key": "Stack",
+                  "Value": "POC"
+                },
+                {
+                  "Key": "Environment",
+                  "Value": "POC"
+                }
+              ],
+              "TracingConfig": {
+                "Mode": "Active"
+              },
+              "Environment": {
+                "Variables": {
+                  "NODE_ENV": "poc",
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "VpcConfig": {
+                "SecurityGroupIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"securityGroupIds\"]"
+                },
+                "SubnetIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"subnetIds\"]"
+                }
+              }
+            },
+            "DependsOn": [
+              "RemarkDashapiDashPOSTLogGroup"
+            ]
+          },
+          "TaskDashapiDashGETLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
+                "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-task-api-GET.zip"
+              },
+              "Handler": "modules/task/api/get.fn",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "servicenow-poc-flm-svc-poc-task-api-GET",
+              "MemorySize": 128,
+              "Timeout": 6,
+              "Tags": [
+                {
+                  "Key": "Stack",
+                  "Value": "POC"
+                },
+                {
+                  "Key": "Environment",
+                  "Value": "POC"
+                }
+              ],
+              "TracingConfig": {
+                "Mode": "Active"
+              },
+              "Environment": {
+                "Variables": {
+                  "NODE_ENV": "poc",
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "VpcConfig": {
+                "SecurityGroupIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"securityGroupIds\"]"
+                },
+                "SubnetIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"subnetIds\"]"
+                }
+              }
+            },
+            "DependsOn": [
+              "TaskDashapiDashGETLogGroup"
+            ]
+          },
+          "TaskDashapiDashPOSTLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
+                "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-task-api-POST.zip"
+              },
+              "Handler": "modules/task/api/post.fn",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "servicenow-poc-flm-svc-poc-task-api-POST",
+              "MemorySize": 128,
+              "Timeout": 6,
+              "Tags": [
+                {
+                  "Key": "Stack",
+                  "Value": "POC"
+                },
+                {
+                  "Key": "Environment",
+                  "Value": "POC"
+                }
+              ],
+              "TracingConfig": {
+                "Mode": "Active"
+              },
+              "Environment": {
+                "Variables": {
+                  "NODE_ENV": "poc",
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "VpcConfig": {
+                "SecurityGroupIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"securityGroupIds\"]"
+                },
+                "SubnetIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"subnetIds\"]"
+                }
+              }
+            },
+            "DependsOn": [
+              "TaskDashapiDashPOSTLogGroup"
+            ]
+          },
+          "TopicDashmasterDashapiDashGETLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
+                "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-topic-master-api-GET.zip"
+              },
+              "Handler": "modules/topic-master/api/get.fn",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "servicenow-poc-flm-svc-poc-topic-master-api-GET",
+              "MemorySize": 128,
+              "Timeout": 6,
+              "Tags": [
+                {
+                  "Key": "Stack",
+                  "Value": "POC"
+                },
+                {
+                  "Key": "Environment",
+                  "Value": "POC"
+                }
+              ],
+              "TracingConfig": {
+                "Mode": "Active"
+              },
+              "Environment": {
+                "Variables": {
+                  "NODE_ENV": "poc",
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "VpcConfig": {
+                "SecurityGroupIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"securityGroupIds\"]"
+                },
+                "SubnetIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"subnetIds\"]"
+                }
+              }
+            },
+            "DependsOn": [
+              "TopicDashmasterDashapiDashGETLogGroup"
+            ]
+          },
+          "TopicDashmasterDashapiDashPOSTLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
+                "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-topic-master-api-POST.zip"
+              },
+              "Handler": "modules/topic-master/api/post.fn",
+              "Runtime": "nodejs14.x",
+              "FunctionName": "servicenow-poc-flm-svc-poc-topic-master-api-POST",
+              "MemorySize": 128,
+              "Timeout": 6,
+              "Tags": [
+                {
+                  "Key": "Stack",
+                  "Value": "POC"
+                },
+                {
+                  "Key": "Environment",
+                  "Value": "POC"
+                }
+              ],
+              "TracingConfig": {
+                "Mode": "Active"
+              },
+              "Environment": {
+                "Variables": {
+                  "NODE_ENV": "poc",
+                  "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "VpcConfig": {
+                "SecurityGroupIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"securityGroupIds\"]"
+                },
+                "SubnetIds": {
+                  "$ref": "$[\"service\"][\"provider\"][\"vpc\"][\"subnetIds\"]"
+                }
+              }
+            },
+            "DependsOn": [
+              "TopicDashmasterDashapiDashPOSTLogGroup"
+            ]
+          },
+          "IssueDashapiDashPOSTLambdaVersion2sGUI9CGAzLMFiZp8lxhsWEX1jAfBHCiRvSnmSwtdI": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "IssueDashapiDashPOSTLambdaFunction"
+              },
+              "CodeSha256": "DUCsOiDZKDeIixkTt6gzK+1ujAdeVAvqO92EUBsObq8="
+            }
+          },
+          "RemarkDashapiDashPOSTLambdaVersionSuzM3fSKrbmPuAabH2SSUmDa8NkiNUhIJ55lJFCJaA": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "RemarkDashapiDashPOSTLambdaFunction"
+              },
+              "CodeSha256": "VaBWXaQRUu9SXCV9siGMXRGJ4pXgCGhvvHA5zDWzhEU="
+            }
+          },
+          "RemarkDashapiDashGETLambdaVersionP2SCtkl5I1dWzBUiZdcd1kS5eb14CosOZgZI3MmTOg": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "RemarkDashapiDashGETLambdaFunction"
+              },
+              "CodeSha256": "wE+GLfYVfsWF4Fu7o2bdWzKEqqHpiMWQeTN0nP+oMw0="
+            }
+          },
+          "TaskDashapiDashGETLambdaVersionS87WXTqzee4JKVCKAfBuQnNGUZxCiBeefHx8": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "TaskDashapiDashGETLambdaFunction"
+              },
+              "CodeSha256": "aim42YpwHojgZLChtQj9De6yT4pLjhoNStq8XyUo9Qk="
+            }
+          },
+          "TaskDashapiDashPOSTLambdaVersionxee37A9sPHVoocHzd98KBpoQGdZi1sTsAv0Oc2lA": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "TaskDashapiDashPOSTLambdaFunction"
+              },
+              "CodeSha256": "jmJMVun3sCy8xu50K+C1aWy0wHG0NOGytFmKSjXIEGg="
+            }
+          },
+          "TopicDashmasterDashapiDashGETLambdaVersionKw8JdMoQL0rd6q9KcKSgEsZJzdK6qJAkRUUCrbSPbZ0": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "TopicDashmasterDashapiDashGETLambdaFunction"
+              },
+              "CodeSha256": "vVM754yRYBoWvn9hjvfPo6AGt0dt2BVdFYn0RnEpwJY="
+            }
+          },
+          "TopicDashmasterDashapiDashPOSTLambdaVersionLceeS9DCLoBs4KMocpAxxOwj0EetLNYclxDhMiLVwkw": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "TopicDashmasterDashapiDashPOSTLambdaFunction"
+              },
+              "CodeSha256": "RyftH2KqeLDK3qcd37v1pZ8FLYNwPyqxAbWF6kL8zJQ="
+            }
+          },
+          "IssueDashapiDashGETLambdaVersion7T9WQtstU97VqCWbk5ENeJ7jJaUH01kCb1SNB97B67s": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "IssueDashapiDashGETLambdaFunction"
+              },
+              "CodeSha256": "syxDFcOnNh1ypuwkMZsVwPbNboloRBMqrTsDaOiPa6E="
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "servicenow-poc-flm-svc-poc",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              },
+              "Policy": "",
+              "MinimumCompressionSize": 1024
+            }
+          },
+          "ApiGatewayResourceFlmDashsvc": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "flm-svc",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceFlmDashsvcGetDashissue": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceFlmDashsvc"
+              },
+              "PathPart": "get-issue",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceFlmDashsvcPostDashissue": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceFlmDashsvc"
+              },
+              "PathPart": "post-issue",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceFlmDashsvcGetDashremark": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceFlmDashsvc"
+              },
+              "PathPart": "get-remark",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceFlmDashsvcPostDashremark": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceFlmDashsvc"
+              },
+              "PathPart": "post-remark",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceFlmDashsvcGetDashtask": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceFlmDashsvc"
+              },
+              "PathPart": "get-task",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceFlmDashsvcPostDashtask": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceFlmDashsvc"
+              },
+              "PathPart": "post-task",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceFlmDashsvcGetDashtopicDashmaster": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceFlmDashsvc"
+              },
+              "PathPart": "get-topic-master",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceFlmDashsvcPostDashtopicDashmaster": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceFlmDashsvc"
+              },
+              "PathPart": "post-topic-master",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcGetDashissueOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Access-Control-Allow-Origin,x-oauth-config-provider,Access-Control-Allow-Headers'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcGetDashissue"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcPostDashissueOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Access-Control-Allow-Origin,x-oauth-config-provider,Access-Control-Allow-Headers'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcPostDashissue"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcGetDashremarkOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Access-Control-Allow-Origin,x-oauth-config-provider,Access-Control-Allow-Headers'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcGetDashremark"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcPostDashremarkOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Access-Control-Allow-Origin,x-oauth-config-provider,Access-Control-Allow-Headers'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcPostDashremark"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcGetDashtaskOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Access-Control-Allow-Origin,x-oauth-config-provider,Access-Control-Allow-Headers'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcGetDashtask"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcPostDashtaskOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Access-Control-Allow-Origin,x-oauth-config-provider,Access-Control-Allow-Headers'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcPostDashtask"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcGetDashtopicDashmasterOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Access-Control-Allow-Origin,x-oauth-config-provider,Access-Control-Allow-Headers'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcGetDashtopicDashmaster"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcPostDashtopicDashmasterOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Access-Control-Allow-Origin,x-oauth-config-provider,Access-Control-Allow-Headers'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": "#set($origin = $input.params(\"Origin\"))\n#if($origin == \"\") #set($origin = $input.params(\"origin\")) #end\n#if($origin.matches(\".+\")) #set($context.responseOverride.header.Access-Control-Allow-Origin = $origin) #end"
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcPostDashtopicDashmaster"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcGetDashissueGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcGetDashissue"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "IssueDashapiDashGETLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcPostDashissuePost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcPostDashissue"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "IssueDashapiDashPOSTLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcGetDashremarkGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcGetDashremark"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "RemarkDashapiDashGETLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcPostDashremarkPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcPostDashremark"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "RemarkDashapiDashPOSTLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcGetDashtaskGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcGetDashtask"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "TaskDashapiDashGETLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcPostDashtaskPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcPostDashtask"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "TaskDashapiDashPOSTLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcGetDashtopicDashmasterGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcGetDashtopicDashmaster"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "TopicDashmasterDashapiDashGETLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodFlmDashsvcPostDashtopicDashmasterPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceFlmDashsvcPostDashtopicDashmaster"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "TopicDashmasterDashapiDashPOSTLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayDeployment1632416495758": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "poc"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodFlmDashsvcGetDashissueOptions",
+              "ApiGatewayMethodFlmDashsvcPostDashissueOptions",
+              "ApiGatewayMethodFlmDashsvcGetDashremarkOptions",
+              "ApiGatewayMethodFlmDashsvcPostDashremarkOptions",
+              "ApiGatewayMethodFlmDashsvcGetDashtaskOptions",
+              "ApiGatewayMethodFlmDashsvcPostDashtaskOptions",
+              "ApiGatewayMethodFlmDashsvcGetDashtopicDashmasterOptions",
+              "ApiGatewayMethodFlmDashsvcPostDashtopicDashmasterOptions",
+              "ApiGatewayMethodFlmDashsvcGetDashissueGet",
+              "ApiGatewayMethodFlmDashsvcPostDashissuePost",
+              "ApiGatewayMethodFlmDashsvcGetDashremarkGet",
+              "ApiGatewayMethodFlmDashsvcPostDashremarkPost",
+              "ApiGatewayMethodFlmDashsvcGetDashtaskGet",
+              "ApiGatewayMethodFlmDashsvcPostDashtaskPost",
+              "ApiGatewayMethodFlmDashsvcGetDashtopicDashmasterGet",
+              "ApiGatewayMethodFlmDashsvcPostDashtopicDashmasterPost"
+            ]
+          },
+          "IssueDashapiDashGETLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "IssueDashapiDashGETLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "IssueDashapiDashPOSTLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "IssueDashapiDashPOSTLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "RemarkDashapiDashGETLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "RemarkDashapiDashGETLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "RemarkDashapiDashPOSTLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "RemarkDashapiDashPOSTLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "TaskDashapiDashGETLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "TaskDashapiDashGETLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "TaskDashapiDashPOSTLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "TaskDashapiDashPOSTLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "TopicDashmasterDashapiDashGETLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "TopicDashmasterDashapiDashGETLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "TopicDashmasterDashapiDashPOSTLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "TopicDashmasterDashapiDashPOSTLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "ApiGatewayLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/api-gateway/servicenow-poc-flm-svc-poc"
+            }
+          },
+          "CustomApiGatewayAccountCloudWatchRole": {
+            "Type": "Custom::ApiGatewayAccountRole",
+            "Version": 1,
+            "Properties": {
+              "ServiceToken": {
+                "Fn::GetAtt": [
+                  "CustomDashresourceDashapigwDashcwDashroleLambdaFunction",
+                  "Arn"
+                ]
+              }
+            }
+          },
+          "IamRoleCustomResourcesLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "poc",
+                        "servicenow-poc-flm-svc",
+                        "custom-resources-lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Resource": {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              "iam:",
+                              {
+                                "Ref": "AWS::AccountId"
+                              },
+                              "role/*"
+                            ]
+                          ]
+                        },
+                        "Action": [
+                          "iam:AttachRolePolicy",
+                          "iam:CreateRole",
+                          "iam:ListAttachedRolePolicies",
+                          "iam:PassRole"
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Resource": {
+                          "Fn::Join": [
+                            ":",
+                            [
+                              "arn",
+                              {
+                                "Ref": "AWS::Partition"
+                              },
+                              "apigateway:*::/account"
+                            ]
+                          ]
+                        },
+                        "Action": [
+                          "apigateway:GET",
+                          "apigateway:PATCH"
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "CustomDashresourceDashapigwDashcwDashroleLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
+                "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/custom-resources.zip"
+              },
+              "FunctionName": "servicenow-poc-flm-svc-poc-custom-resource-apigw-cw-role",
+              "Handler": "apiGatewayCloudWatchRole/handler.handler",
+              "MemorySize": 1024,
+              "Runtime": "nodejs12.x",
+              "Timeout": 180,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleCustomResourcesLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "IamRoleCustomResourcesLambdaExecution"
+            ]
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": "tas-deployments-bucket-poc-ap-south-1"
+          },
+          "IssueDashapiDashPOSTLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "IssueDashapiDashPOSTLambdaVersion2sGUI9CGAzLMFiZp8lxhsWEX1jAfBHCiRvSnmSwtdI"
+            }
+          },
+          "RemarkDashapiDashPOSTLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "RemarkDashapiDashPOSTLambdaVersionSuzM3fSKrbmPuAabH2SSUmDa8NkiNUhIJ55lJFCJaA"
+            }
+          },
+          "RemarkDashapiDashGETLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "RemarkDashapiDashGETLambdaVersionP2SCtkl5I1dWzBUiZdcd1kS5eb14CosOZgZI3MmTOg"
+            }
+          },
+          "TaskDashapiDashGETLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "TaskDashapiDashGETLambdaVersionS87WXTqzee4JKVCKAfBuQnNGUZxCiBeefHx8"
+            }
+          },
+          "TaskDashapiDashPOSTLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "TaskDashapiDashPOSTLambdaVersionxee37A9sPHVoocHzd98KBpoQGdZi1sTsAv0Oc2lA"
+            }
+          },
+          "TopicDashmasterDashapiDashGETLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "TopicDashmasterDashapiDashGETLambdaVersionKw8JdMoQL0rd6q9KcKSgEsZJzdK6qJAkRUUCrbSPbZ0"
+            }
+          },
+          "TopicDashmasterDashapiDashPOSTLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "TopicDashmasterDashapiDashPOSTLambdaVersionLceeS9DCLoBs4KMocpAxxOwj0EetLNYclxDhMiLVwkw"
+            }
+          },
+          "IssueDashapiDashGETLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "IssueDashapiDashGETLambdaVersion7T9WQtstU97VqCWbk5ENeJ7jJaUH01kCb1SNB97B67s"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/poc"
+                ]
+              ]
+            }
+          }
+        }
+      }
+    },
+    "custom": {
+      "serviceUrlBasePath": "flm-svc",
+      "esbuild": {
+        "bundle": true,
+        "minify": true
+      },
+      "splitStacks": {
+        "nestedStackCount": 20,
+        "perFunction": true,
+        "perType": false,
+        "perGroupFunction": false
+      },
+      "prune": {
+        "automatic": true,
+        "includeLayers": true,
+        "number": 5
+      }
+    },
+    "plugins": [
+      "serverless-esbuild",
+      "serverless-prune-plugin"
+    ],
+    "pluginsData": {},
+    "functions": {
+      "issue-api-GET": {
+        "handler": "modules/issue/api/get.fn",
+        "events": [
+          {
+            "http": {
+              "path": "flm-svc/get-issue",
+              "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "Access-Control-Allow-Origin",
+                  "x-oauth-config-provider",
+                  "Access-Control-Allow-Headers"
+                ],
+                "allowCredentials": false,
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ]
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "servicenow-poc-flm-svc-poc-issue-api-GET",
+        "package": {
+          "artifact": "/Users/850046713mac/Documents/Projects/OPS360-Project/serverless-servicenow-poc/.serverless/servicenow-poc-flm-svc-dev-issue-api-GET.zip"
+        },
+        "memory": 128,
+        "timeout": 6,
+        "runtime": "nodejs14.x",
+        "vpc": {},
+        "versionLogicalId": "IssueDashapiDashGETLambdaVersion7T9WQtstU97VqCWbk5ENeJ7jJaUH01kCb1SNB97B67s"
+      },
+      "issue-api-POST": {
+        "handler": "modules/issue/api/post.fn",
+        "events": [
+          {
+            "http": {
+              "path": "flm-svc/post-issue",
+              "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "Access-Control-Allow-Origin",
+                  "x-oauth-config-provider",
+                  "Access-Control-Allow-Headers"
+                ],
+                "allowCredentials": false,
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ]
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "servicenow-poc-flm-svc-poc-issue-api-POST",
+        "package": {
+          "artifact": "/Users/850046713mac/Documents/Projects/OPS360-Project/serverless-servicenow-poc/.serverless/servicenow-poc-flm-svc-dev-issue-api-POST.zip"
+        },
+        "memory": 128,
+        "timeout": 6,
+        "runtime": "nodejs14.x",
+        "vpc": {},
+        "versionLogicalId": "IssueDashapiDashPOSTLambdaVersion2sGUI9CGAzLMFiZp8lxhsWEX1jAfBHCiRvSnmSwtdI"
+      },
+      "remark-api-GET": {
+        "handler": "modules/remark/api/get.fn",
+        "events": [
+          {
+            "http": {
+              "path": "flm-svc/get-remark",
+              "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "Access-Control-Allow-Origin",
+                  "x-oauth-config-provider",
+                  "Access-Control-Allow-Headers"
+                ],
+                "allowCredentials": false,
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ]
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "servicenow-poc-flm-svc-poc-remark-api-GET",
+        "package": {
+          "artifact": "/Users/850046713mac/Documents/Projects/OPS360-Project/serverless-servicenow-poc/.serverless/servicenow-poc-flm-svc-dev-remark-api-GET.zip"
+        },
+        "memory": 128,
+        "timeout": 6,
+        "runtime": "nodejs14.x",
+        "vpc": {},
+        "versionLogicalId": "RemarkDashapiDashGETLambdaVersionP2SCtkl5I1dWzBUiZdcd1kS5eb14CosOZgZI3MmTOg"
+      },
+      "remark-api-POST": {
+        "handler": "modules/remark/api/post.fn",
+        "events": [
+          {
+            "http": {
+              "path": "flm-svc/post-remark",
+              "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "Access-Control-Allow-Origin",
+                  "x-oauth-config-provider",
+                  "Access-Control-Allow-Headers"
+                ],
+                "allowCredentials": false,
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ]
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "servicenow-poc-flm-svc-poc-remark-api-POST",
+        "package": {
+          "artifact": "/Users/850046713mac/Documents/Projects/OPS360-Project/serverless-servicenow-poc/.serverless/servicenow-poc-flm-svc-dev-remark-api-POST.zip"
+        },
+        "memory": 128,
+        "timeout": 6,
+        "runtime": "nodejs14.x",
+        "vpc": {},
+        "versionLogicalId": "RemarkDashapiDashPOSTLambdaVersionSuzM3fSKrbmPuAabH2SSUmDa8NkiNUhIJ55lJFCJaA"
+      },
+      "task-api-GET": {
+        "handler": "modules/task/api/get.fn",
+        "events": [
+          {
+            "http": {
+              "path": "flm-svc/get-task",
+              "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "Access-Control-Allow-Origin",
+                  "x-oauth-config-provider",
+                  "Access-Control-Allow-Headers"
+                ],
+                "allowCredentials": false,
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ]
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "servicenow-poc-flm-svc-poc-task-api-GET",
+        "package": {
+          "artifact": "/Users/850046713mac/Documents/Projects/OPS360-Project/serverless-servicenow-poc/.serverless/servicenow-poc-flm-svc-dev-task-api-GET.zip"
+        },
+        "memory": 128,
+        "timeout": 6,
+        "runtime": "nodejs14.x",
+        "vpc": {},
+        "versionLogicalId": "TaskDashapiDashGETLambdaVersionS87WXTqzee4JKVCKAfBuQnNGUZxCiBeefHx8"
+      },
+      "task-api-POST": {
+        "handler": "modules/task/api/post.fn",
+        "events": [
+          {
+            "http": {
+              "path": "flm-svc/post-task",
+              "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "Access-Control-Allow-Origin",
+                  "x-oauth-config-provider",
+                  "Access-Control-Allow-Headers"
+                ],
+                "allowCredentials": false,
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ]
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "servicenow-poc-flm-svc-poc-task-api-POST",
+        "package": {
+          "artifact": "/Users/850046713mac/Documents/Projects/OPS360-Project/serverless-servicenow-poc/.serverless/servicenow-poc-flm-svc-dev-task-api-POST.zip"
+        },
+        "memory": 128,
+        "timeout": 6,
+        "runtime": "nodejs14.x",
+        "vpc": {},
+        "versionLogicalId": "TaskDashapiDashPOSTLambdaVersionxee37A9sPHVoocHzd98KBpoQGdZi1sTsAv0Oc2lA"
+      },
+      "topic-master-api-GET": {
+        "handler": "modules/topic-master/api/get.fn",
+        "events": [
+          {
+            "http": {
+              "path": "flm-svc/get-topic-master",
+              "method": "get",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "Access-Control-Allow-Origin",
+                  "x-oauth-config-provider",
+                  "Access-Control-Allow-Headers"
+                ],
+                "allowCredentials": false,
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ]
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "servicenow-poc-flm-svc-poc-topic-master-api-GET",
+        "package": {
+          "artifact": "/Users/850046713mac/Documents/Projects/OPS360-Project/serverless-servicenow-poc/.serverless/servicenow-poc-flm-svc-dev-topic-master-api-GET.zip"
+        },
+        "memory": 128,
+        "timeout": 6,
+        "runtime": "nodejs14.x",
+        "vpc": {},
+        "versionLogicalId": "TopicDashmasterDashapiDashGETLambdaVersionKw8JdMoQL0rd6q9KcKSgEsZJzdK6qJAkRUUCrbSPbZ0"
+      },
+      "topic-master-api-POST": {
+        "handler": "modules/topic-master/api/post.fn",
+        "events": [
+          {
+            "http": {
+              "path": "flm-svc/post-topic-master",
+              "method": "post",
+              "cors": {
+                "origins": [
+                  "*"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "Access-Control-Allow-Origin",
+                  "x-oauth-config-provider",
+                  "Access-Control-Allow-Headers"
+                ],
+                "allowCredentials": false,
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ]
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "servicenow-poc-flm-svc-poc-topic-master-api-POST",
+        "package": {
+          "artifact": "/Users/850046713mac/Documents/Projects/OPS360-Project/serverless-servicenow-poc/.serverless/servicenow-poc-flm-svc-dev-topic-master-api-POST.zip"
+        },
+        "memory": 128,
+        "timeout": 6,
+        "runtime": "nodejs14.x",
+        "vpc": {},
+        "versionLogicalId": "TopicDashmasterDashapiDashPOSTLambdaVersionLceeS9DCLoBs4KMocpAxxOwj0EetLNYclxDhMiLVwkw"
+      }
+    },
+    "resources": {
+      "Resources": {},
+      "Outputs": {}
+    },
+    "configValidationMode": "warn",
+    "serviceFilename": "serverless.ts",
+    "layers": {},
+    "initialServerlessConfig": {
+      "service": {
+        "$ref": "$[\"service\"][\"serviceObject\"]"
+      },
+      "frameworkVersion": "2",
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "package": {
+        "individually": true,
+        "excludeDevDependencies": true,
+        "patterns": [
+          "node_modules/aws-sdk/**"
+        ],
+        "deploymentBucket": "tas-deployments-bucket-poc-ap-south-1"
+      },
+      "custom": {
+        "$ref": "$[\"service\"][\"custom\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      },
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      }
+    },
+    "isDashboardMonitoringPreconfigured": false
+  },
+  "package": {
+    "individually": true,
+    "artifactDirectoryName": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z",
+    "artifact": ""
+  }
+}

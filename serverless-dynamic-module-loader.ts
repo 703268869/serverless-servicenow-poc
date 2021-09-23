@@ -30,6 +30,8 @@ function findFilesInDir(startPath, filter) {
 
 export default (x) => {
   const files = findFilesInDir('./modules', 'handler.ts');
+  console.log('files =====>', files);
+  console.log('x =====>', x);
   const merged = files.map((f) => require(`./${f}`)(x)).reduce((result, handler) => Object.assign(result, handler), {});
   return merged;
 };
