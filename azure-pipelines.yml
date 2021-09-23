@@ -1,0 +1,23 @@
+# Node.js with Vue
+
+trigger:
+  branches:
+    include:
+      - master
+      - release/*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+      includeRootFolder: false
+      archiveFile: '$(Build.ArtifactStagingDirectory)/$(System.TeamProject)-$(Build.DefinitionName).zip'
+    displayName: 'Archive repository'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(System.TeamProject)-$(Build.DefinitionName).zip'
+    displayName: 'Publish artifacts: drop'
