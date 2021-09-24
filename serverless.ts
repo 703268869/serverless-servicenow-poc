@@ -38,7 +38,9 @@ const serverlessConfiguration: AWS = {
         statements: [
           {
             Effect: 'Allow',
-            Action: ['ssm:GetParameter', 'ssm:GetParameterHistory', 'ssm:GetParameters', 'ssm:GetParametersByPath'],
+            Action: ['ssm:GetParameter', 'ssm:GetParameterHistory', 'ssm:GetParameters', 'ssm:GetParametersByPath', 
+            'secretsmanager:DescribeSecret', 'secretsmanager:ListSecretVersionIds', 'secretsmanager:ListSecrets',
+            'secretsmanager:GetSecretValue', 'secretsmanager:GetResourcePolicy', 'lambda:*'],
             Resource: '*',
           },
         ],

@@ -113,7 +113,13 @@
                     "ssm:GetParameter",
                     "ssm:GetParameterHistory",
                     "ssm:GetParameters",
-                    "ssm:GetParametersByPath"
+                    "ssm:GetParametersByPath",
+                    "secretsmanager:DescribeSecret",
+                    "secretsmanager:ListSecretVersionIds",
+                    "secretsmanager:ListSecrets",
+                    "secretsmanager:GetSecretValue",
+                    "secretsmanager:GetResourcePolicy",
+                    "lambda:*"
                   ],
                   "Resource": "*"
                 },
@@ -166,7 +172,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
-          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-issue-api-GET.zip"
+          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632454911561-2021-09-24T03:41:51.561Z/servicenow-poc-flm-svc-dev-issue-api-GET.zip"
         },
         "Handler": "modules/issue/api/get.fn",
         "Runtime": "nodejs14.x",
@@ -217,7 +223,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
-          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-issue-api-POST.zip"
+          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632454911561-2021-09-24T03:41:51.561Z/servicenow-poc-flm-svc-dev-issue-api-POST.zip"
         },
         "Handler": "modules/issue/api/post.fn",
         "Runtime": "nodejs14.x",
@@ -268,7 +274,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
-          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-remark-api-GET.zip"
+          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632454911561-2021-09-24T03:41:51.561Z/servicenow-poc-flm-svc-dev-remark-api-GET.zip"
         },
         "Handler": "modules/remark/api/get.fn",
         "Runtime": "nodejs14.x",
@@ -319,7 +325,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
-          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-remark-api-POST.zip"
+          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632454911561-2021-09-24T03:41:51.561Z/servicenow-poc-flm-svc-dev-remark-api-POST.zip"
         },
         "Handler": "modules/remark/api/post.fn",
         "Runtime": "nodejs14.x",
@@ -370,7 +376,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
-          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-task-api-GET.zip"
+          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632454911561-2021-09-24T03:41:51.561Z/servicenow-poc-flm-svc-dev-task-api-GET.zip"
         },
         "Handler": "modules/task/api/get.fn",
         "Runtime": "nodejs14.x",
@@ -421,7 +427,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
-          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-task-api-POST.zip"
+          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632454911561-2021-09-24T03:41:51.561Z/servicenow-poc-flm-svc-dev-task-api-POST.zip"
         },
         "Handler": "modules/task/api/post.fn",
         "Runtime": "nodejs14.x",
@@ -472,7 +478,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
-          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-topic-master-api-GET.zip"
+          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632454911561-2021-09-24T03:41:51.561Z/servicenow-poc-flm-svc-dev-topic-master-api-GET.zip"
         },
         "Handler": "modules/topic-master/api/get.fn",
         "Runtime": "nodejs14.x",
@@ -523,7 +529,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
-          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/servicenow-poc-flm-svc-dev-topic-master-api-POST.zip"
+          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632454911561-2021-09-24T03:41:51.561Z/servicenow-poc-flm-svc-dev-topic-master-api-POST.zip"
         },
         "Handler": "modules/topic-master/api/post.fn",
         "Runtime": "nodejs14.x",
@@ -569,84 +575,84 @@
         "TopicDashmasterDashapiDashPOSTLogGroup"
       ]
     },
-    "IssueDashapiDashPOSTLambdaVersion2sGUI9CGAzLMFiZp8lxhsWEX1jAfBHCiRvSnmSwtdI": {
+    "IssueDashapiDashPOSTLambdaVersionPesmGeE2wuC3H1Tq8tJpbS8GqADGmvxuM4t3Aiyg0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "IssueDashapiDashPOSTLambdaFunction"
         },
-        "CodeSha256": "DUCsOiDZKDeIixkTt6gzK+1ujAdeVAvqO92EUBsObq8="
+        "CodeSha256": "Glcm7aY2NNM7Abv7TDAXkzvztA6IFzhzY22+rXpgfpo="
       }
     },
-    "RemarkDashapiDashPOSTLambdaVersionSuzM3fSKrbmPuAabH2SSUmDa8NkiNUhIJ55lJFCJaA": {
-      "Type": "AWS::Lambda::Version",
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "FunctionName": {
-          "Ref": "RemarkDashapiDashPOSTLambdaFunction"
-        },
-        "CodeSha256": "VaBWXaQRUu9SXCV9siGMXRGJ4pXgCGhvvHA5zDWzhEU="
-      }
-    },
-    "RemarkDashapiDashGETLambdaVersionP2SCtkl5I1dWzBUiZdcd1kS5eb14CosOZgZI3MmTOg": {
+    "RemarkDashapiDashGETLambdaVersionRrhEuPyX2QId9VPiYZyF8BGZNzPdmHhQNK1u1ALc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RemarkDashapiDashGETLambdaFunction"
         },
-        "CodeSha256": "wE+GLfYVfsWF4Fu7o2bdWzKEqqHpiMWQeTN0nP+oMw0="
+        "CodeSha256": "G6GDKLuBdNnxrdSFxXoffzgv8KE5pLG+aJc783SUKeY="
       }
     },
-    "TaskDashapiDashGETLambdaVersionS87WXTqzee4JKVCKAfBuQnNGUZxCiBeefHx8": {
+    "RemarkDashapiDashPOSTLambdaVersionQswCzA3BYVPSCnSdvRu0c0JpoT8UeQ9uku4vKQBw0Y4": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "RemarkDashapiDashPOSTLambdaFunction"
+        },
+        "CodeSha256": "r9H9zRuiTbIHrTiTiTKHUcYLWBhVvaqivV7ZdIzKaCc="
+      }
+    },
+    "TaskDashapiDashGETLambdaVersioncInNbCwA4BDMbN0DssI2caJlpR05hC55paIcOpbI0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "TaskDashapiDashGETLambdaFunction"
         },
-        "CodeSha256": "aim42YpwHojgZLChtQj9De6yT4pLjhoNStq8XyUo9Qk="
+        "CodeSha256": "1m6LK+9nCXJnXjvLt13jEpcb6Qf9bBqmOZn9/jpLidI="
       }
     },
-    "TaskDashapiDashPOSTLambdaVersionxee37A9sPHVoocHzd98KBpoQGdZi1sTsAv0Oc2lA": {
+    "TaskDashapiDashPOSTLambdaVersionxa5rr2Sf0Flnes57rAsBXe1T5xq0WgomZu0wEJZCL3I": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "TaskDashapiDashPOSTLambdaFunction"
         },
-        "CodeSha256": "jmJMVun3sCy8xu50K+C1aWy0wHG0NOGytFmKSjXIEGg="
+        "CodeSha256": "iefS5q073ycPvBlkX1+mqvinOlHDr2zTQI0wFUEhTZc="
       }
     },
-    "TopicDashmasterDashapiDashGETLambdaVersionKw8JdMoQL0rd6q9KcKSgEsZJzdK6qJAkRUUCrbSPbZ0": {
+    "TopicDashmasterDashapiDashGETLambdaVersioniB4ySLLsWPwMavIv21eylGXIEV2AVjRynFgDO8jdaQ8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "TopicDashmasterDashapiDashGETLambdaFunction"
         },
-        "CodeSha256": "vVM754yRYBoWvn9hjvfPo6AGt0dt2BVdFYn0RnEpwJY="
+        "CodeSha256": "d551ZQaWdvsrGtdWVSuhlM3RopBi0CNnFiM8P23Bvl0="
       }
     },
-    "TopicDashmasterDashapiDashPOSTLambdaVersionLceeS9DCLoBs4KMocpAxxOwj0EetLNYclxDhMiLVwkw": {
+    "TopicDashmasterDashapiDashPOSTLambdaVersion3SfoUgqLrz5c9SNqXK22bcbXVNsli4PmyLoo9KnEY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "TopicDashmasterDashapiDashPOSTLambdaFunction"
         },
-        "CodeSha256": "RyftH2KqeLDK3qcd37v1pZ8FLYNwPyqxAbWF6kL8zJQ="
+        "CodeSha256": "UZJVXIwiOYz7TrgTcnXbABp5D0rF6ZUNvzVUnW5PP+Q="
       }
     },
-    "IssueDashapiDashGETLambdaVersion7T9WQtstU97VqCWbk5ENeJ7jJaUH01kCb1SNB97B67s": {
+    "IssueDashapiDashGETLambdaVersiony5iErnifYgvJXClchssFRV9MiufnYtgaQzSwA4VlQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "IssueDashapiDashGETLambdaFunction"
         },
-        "CodeSha256": "syxDFcOnNh1ypuwkMZsVwPbNboloRBMqrTsDaOiPa6E="
+        "CodeSha256": "PlFqLSvCrUjc32AE9b7KUGHJh5pf0/t2DY1/0AOERV8="
       }
     },
     "ApiGatewayRestApi": {
@@ -1174,7 +1180,10 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "IssueDashapiDashGETLambdaPermissionApiGateway"
+      ]
     },
     "ApiGatewayMethodFlmDashsvcPostDashissuePost": {
       "Type": "AWS::ApiGateway::Method",
@@ -1217,7 +1226,10 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "IssueDashapiDashPOSTLambdaPermissionApiGateway"
+      ]
     },
     "ApiGatewayMethodFlmDashsvcGetDashremarkGet": {
       "Type": "AWS::ApiGateway::Method",
@@ -1260,7 +1272,10 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "RemarkDashapiDashGETLambdaPermissionApiGateway"
+      ]
     },
     "ApiGatewayMethodFlmDashsvcPostDashremarkPost": {
       "Type": "AWS::ApiGateway::Method",
@@ -1303,7 +1318,10 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "RemarkDashapiDashPOSTLambdaPermissionApiGateway"
+      ]
     },
     "ApiGatewayMethodFlmDashsvcGetDashtaskGet": {
       "Type": "AWS::ApiGateway::Method",
@@ -1346,7 +1364,10 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "TaskDashapiDashGETLambdaPermissionApiGateway"
+      ]
     },
     "ApiGatewayMethodFlmDashsvcPostDashtaskPost": {
       "Type": "AWS::ApiGateway::Method",
@@ -1389,7 +1410,10 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "TaskDashapiDashPOSTLambdaPermissionApiGateway"
+      ]
     },
     "ApiGatewayMethodFlmDashsvcGetDashtopicDashmasterGet": {
       "Type": "AWS::ApiGateway::Method",
@@ -1432,7 +1456,10 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "TopicDashmasterDashapiDashGETLambdaPermissionApiGateway"
+      ]
     },
     "ApiGatewayMethodFlmDashsvcPostDashtopicDashmasterPost": {
       "Type": "AWS::ApiGateway::Method",
@@ -1475,9 +1502,12 @@
           }
         },
         "MethodResponses": []
-      }
+      },
+      "DependsOn": [
+        "TopicDashmasterDashapiDashPOSTLambdaPermissionApiGateway"
+      ]
     },
-    "ApiGatewayDeployment1632416495758": {
+    "ApiGatewayDeployment1632454897580": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1907,7 +1937,7 @@
       "Properties": {
         "Code": {
           "S3Bucket": "tas-deployments-bucket-poc-ap-south-1",
-          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632416498378-2021-09-23T17:01:38.378Z/custom-resources.zip"
+          "S3Key": "serverless/servicenow-poc-flm-svc/poc/1632454911561-2021-09-24T03:41:51.561Z/custom-resources.zip"
         },
         "FunctionName": "servicenow-poc-flm-svc-poc-custom-resource-apigw-cw-role",
         "Handler": "apiGatewayCloudWatchRole/handler.handler",
@@ -1928,54 +1958,81 @@
   },
   "Outputs": {
     "ServerlessDeploymentBucketName": {
-      "Value": "tas-deployments-bucket-poc-ap-south-1"
+      "Value": "tas-deployments-bucket-poc-ap-south-1",
+      "Export": {
+        "Name": "sls-servicenow-poc-flm-svc-poc-ServerlessDeploymentBucketName"
+      }
     },
     "IssueDashapiDashPOSTLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "IssueDashapiDashPOSTLambdaVersion2sGUI9CGAzLMFiZp8lxhsWEX1jAfBHCiRvSnmSwtdI"
-      }
-    },
-    "RemarkDashapiDashPOSTLambdaFunctionQualifiedArn": {
-      "Description": "Current Lambda function version",
-      "Value": {
-        "Ref": "RemarkDashapiDashPOSTLambdaVersionSuzM3fSKrbmPuAabH2SSUmDa8NkiNUhIJ55lJFCJaA"
+        "Ref": "IssueDashapiDashPOSTLambdaVersionPesmGeE2wuC3H1Tq8tJpbS8GqADGmvxuM4t3Aiyg0"
+      },
+      "Export": {
+        "Name": "sls-servicenow-poc-flm-svc-poc-IssueDashapiDashPOSTLambdaFunctionQualifiedArn"
       }
     },
     "RemarkDashapiDashGETLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RemarkDashapiDashGETLambdaVersionP2SCtkl5I1dWzBUiZdcd1kS5eb14CosOZgZI3MmTOg"
+        "Ref": "RemarkDashapiDashGETLambdaVersionRrhEuPyX2QId9VPiYZyF8BGZNzPdmHhQNK1u1ALc"
+      },
+      "Export": {
+        "Name": "sls-servicenow-poc-flm-svc-poc-RemarkDashapiDashGETLambdaFunctionQualifiedArn"
+      }
+    },
+    "RemarkDashapiDashPOSTLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "RemarkDashapiDashPOSTLambdaVersionQswCzA3BYVPSCnSdvRu0c0JpoT8UeQ9uku4vKQBw0Y4"
+      },
+      "Export": {
+        "Name": "sls-servicenow-poc-flm-svc-poc-RemarkDashapiDashPOSTLambdaFunctionQualifiedArn"
       }
     },
     "TaskDashapiDashGETLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "TaskDashapiDashGETLambdaVersionS87WXTqzee4JKVCKAfBuQnNGUZxCiBeefHx8"
+        "Ref": "TaskDashapiDashGETLambdaVersioncInNbCwA4BDMbN0DssI2caJlpR05hC55paIcOpbI0"
+      },
+      "Export": {
+        "Name": "sls-servicenow-poc-flm-svc-poc-TaskDashapiDashGETLambdaFunctionQualifiedArn"
       }
     },
     "TaskDashapiDashPOSTLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "TaskDashapiDashPOSTLambdaVersionxee37A9sPHVoocHzd98KBpoQGdZi1sTsAv0Oc2lA"
+        "Ref": "TaskDashapiDashPOSTLambdaVersionxa5rr2Sf0Flnes57rAsBXe1T5xq0WgomZu0wEJZCL3I"
+      },
+      "Export": {
+        "Name": "sls-servicenow-poc-flm-svc-poc-TaskDashapiDashPOSTLambdaFunctionQualifiedArn"
       }
     },
     "TopicDashmasterDashapiDashGETLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "TopicDashmasterDashapiDashGETLambdaVersionKw8JdMoQL0rd6q9KcKSgEsZJzdK6qJAkRUUCrbSPbZ0"
+        "Ref": "TopicDashmasterDashapiDashGETLambdaVersioniB4ySLLsWPwMavIv21eylGXIEV2AVjRynFgDO8jdaQ8"
+      },
+      "Export": {
+        "Name": "sls-servicenow-poc-flm-svc-poc-TopicDashmasterDashapiDashGETLambdaFunctionQualifiedArn"
       }
     },
     "TopicDashmasterDashapiDashPOSTLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "TopicDashmasterDashapiDashPOSTLambdaVersionLceeS9DCLoBs4KMocpAxxOwj0EetLNYclxDhMiLVwkw"
+        "Ref": "TopicDashmasterDashapiDashPOSTLambdaVersion3SfoUgqLrz5c9SNqXK22bcbXVNsli4PmyLoo9KnEY"
+      },
+      "Export": {
+        "Name": "sls-servicenow-poc-flm-svc-poc-TopicDashmasterDashapiDashPOSTLambdaFunctionQualifiedArn"
       }
     },
     "IssueDashapiDashGETLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "IssueDashapiDashGETLambdaVersion7T9WQtstU97VqCWbk5ENeJ7jJaUH01kCb1SNB97B67s"
+        "Ref": "IssueDashapiDashGETLambdaVersiony5iErnifYgvJXClchssFRV9MiufnYtgaQzSwA4VlQ"
+      },
+      "Export": {
+        "Name": "sls-servicenow-poc-flm-svc-poc-IssueDashapiDashGETLambdaFunctionQualifiedArn"
       }
     },
     "ServiceEndpoint": {
@@ -1999,6 +2056,9 @@
             "/poc"
           ]
         ]
+      },
+      "Export": {
+        "Name": "sls-servicenow-poc-flm-svc-poc-ServiceEndpoint"
       }
     }
   }
